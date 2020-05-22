@@ -4,11 +4,13 @@ let textToAnaylze = document.getElementById("textToAnalyze");
 let factCheckTextButton = document.getElementById("factCheckTextButton");
 let textToFactCheck = document.getElementById("textToFactCheck");
 
+var baseUrl = "http://127.0.0.1:8080";
+
 chrome.tabs.executeScript(
   {
-    code: "window.getSelection().toString();"
+    code: "window.getSelection().toString();",
   },
-  async function(selection) {
+  async function (selection) {
     var query = { active: true, currentWindow: true };
     await chrome.tabs.query(query, callback);
   }
@@ -18,15 +20,15 @@ async function callback(tabs) {
   var currentTab = tabs[0].url;
   console.log(currentTab); // there will be only one in this array
 
-  fetch("https://nwhackers2020.appspot.com/scrap_website", {
+  fetch(baseUrl + "/scrap_website", {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: "url=" + currentTab
+    body: "url=" + currentTab,
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       console.log(data);
 
       const sentimentScore = data.sentiment.score;
@@ -53,7 +55,7 @@ async function callback(tabs) {
 
       this.setCategories(data);
     })
-    .catch(error => {
+    .catch((error) => {
       document.getElementById("spinner").style.display = "none";
       alert("We were unable to analyze this website.");
     });
