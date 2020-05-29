@@ -73,7 +73,11 @@ function setKeywords(keywordArray) {
 }
 
 function setCategories(data) {
-  if (data.categories === undefined || data.categories === null) {
+  if (
+    data.categories === undefined ||
+    data.categories === null ||
+    data.categories.length === 0
+  ) {
     document.getElementById("category").remove();
     return;
   }
